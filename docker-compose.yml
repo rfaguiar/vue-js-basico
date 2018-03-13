@@ -1,0 +1,32 @@
+version: "3"
+
+networks: 
+  desenv-network:
+    driver: bridge
+
+services:
+
+  photopic-api:
+    build: 
+      dockerfile: ./api.dockerfile
+      context: .
+    image: photopic-api/node
+    container_name: photopic-api
+    ports: 
+      - "8180:8180"
+    networks:
+      - desenv-network
+
+  photopic:
+    build:
+      dockerfile: ./photopic.dockerfile
+      context: .
+    image: photopic-vue/node
+    container_name: photopic
+    ports: 
+      - "8080:8080"
+    networks:
+      - desenv-network
+    depends_on: 
+      - "photopic-api"
+    

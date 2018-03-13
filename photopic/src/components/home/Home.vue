@@ -7,7 +7,7 @@
     {{ filtro }}
 
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto in fotosComFiltro">
+      <li class="lista-fotos-item" v-for="foto in fotosComFiltro" :key="foto.titulo">
 
         <meu-painel :titulo="foto.titulo">
           <imagem-responsiva :url="foto.url" :titulo="foto.titulo"/>
@@ -48,7 +48,7 @@ export default {
   data () {
     
     return {
-      titulo: 'Alurapic',
+      titulo: 'Photopic',
       fotos: [],
       filtro: ''
     };
@@ -70,9 +70,14 @@ export default {
 
   created () {
 
-    this.$http.get('http://localhost:3000/v1/fotos')
-      .then(res => res.json())
-      .then(fotos => this.fotos = fotos, err => console.log(err));
+	this.$resource('v1/fotos')
+			.query()
+            .then(res => res.json())
+			.then(fotos => this.fotos = fotos, err => console.log('Não foi possível obter as fotos. Tenta mais tarde'));
+
+    //this.$http.get('http://localhost:3000/v1/fotos')
+    //  .then(res => res.json())
+    //  .then(fotos => this.fotos = fotos, err => console.log(err));
   }
 }
 </script>
